@@ -1,0 +1,71 @@
+# Note: Comment out to disable move_group-related presets
+move_group_name: manipulator
+
+presets:
+  arm_twist:
+    trigger: always
+    action:
+      - type: arm_twist
+        frame_id: base_link
+        out_topic: cmd_delta
+        # Don't publish twist if no change is commanded
+        quiet_on_zero: true
+        scale:
+          translation: 0.05
+          rotation: 0.15
+        mapping:
+          x: LSV
+          y: LSH
+          z: [R2, -L2]
+          R: -RSH
+          P: RSV
+          Y: [L1, -R1]
+  home:
+    trigger: [Q, Q, Q]
+    action:
+      - type: move_group_state
+        state_name: home
+        action: move
+  up:
+    trigger: [T, T, T]
+    action:
+      - type: move_group_state
+        state_name: up
+        action: move
+  custom_1:
+    trigger: [SH, SH, SH]
+    action:
+      - type: move_group_state
+        state_name: custom_1
+        action: move
+  remember_custom_1:
+    trigger: [SH, 3]
+    action:
+      - type: move_group_state
+        state_name: custom_1
+        action: remember
+  custom_2:
+    trigger: [OP, OP, OP]
+    action:
+      - type: move_group_state
+        state_name: custom_2
+        action: move
+  remember_custom_2:
+    trigger: [OP, 3]
+    action:
+      - type: move_group_state
+        state_name: custom_2
+        action: remember
+  recovery:
+    trigger: [[SH, OP], [SH, OP]]
+    action:
+      - type: single_point_trajectory
+        topic: arm_controller/command
+        joints:
+          shoulder_lift_joint: -0.785
+          shoulder_pan_joint: -0.785
+          wrist_1_joint: 0
+        frame_id: base_link
+        execution_time: 2.5
+      - type: sleep
+        duration: 3.0
