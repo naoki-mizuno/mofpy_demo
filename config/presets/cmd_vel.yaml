@@ -9,29 +9,35 @@ presets:
   publish_hello:
     trigger: X
     action:
-      - type: publish_string
-        topic: hello
-        value: 'Hello there (now going to sleep for a second)'
-        include_time: true
+      - type: publish
+        topic:
+          name: hello
+          type: std_msgs/String
+        values:
+          data: 'Hello there (now going to sleep for a second)'
       - type: sleep
         duration: 1
-      - type: publish_string
-        topic: hello
-        value: 'Hello again!'
-        include_time: true
+      - type: publish
+        topic:
+          name: hello
+          type: std_msgs/String
+        values:
+          data: 'Hello again!'
   only_state_1:
     trigger: [X, 1]
     enabled_states: ['state-1']
     action:
-      - type: publish_string
-        topic: hello
-        value: 'I only get published in state-1'
-        include_date: true
+      - type: publish
+        topic:
+          name: hello
+          type: std_msgs/String
+        values:
+          data: 'I only get published in state-1'
   cmd_vel:
     trigger: always
     enabled_states: ['chassis']
     action:
-      - type: publish_cmd_vel
+      - type: twist_2dof
         out_topic: cmd_vel
         frame_id: base_link
         scale:

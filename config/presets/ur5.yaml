@@ -1,11 +1,15 @@
 # Note: Comment out to disable move_group-related presets
-move_group_name: manipulator
+move_group:
+  enabled: true
+  planning_group: manipulator
+  robot_description: robot_description
+  action_namespace: /
 
 presets:
   arm_twist:
     trigger: always
     action:
-      - type: arm_twist
+      - type: twist_6dof
         frame_id: base_link
         out_topic: cmd_delta
         # Don't publish twist if no change is commanded

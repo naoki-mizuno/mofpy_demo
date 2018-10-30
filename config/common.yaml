@@ -7,7 +7,9 @@ presets:
   super:
     trigger: [C_U, C_U, C_D, C_D, C_L, C_R, C_L, C_R, X, O]
     action:
-      - type: publish_string
-        topic: super
-        include_time: true
-        value: 'You found the secret command!'
+      - type: publish
+        topic:
+          name: super
+          type: std_msgs/String
+        values:
+          data: 'You found the secret command!'
